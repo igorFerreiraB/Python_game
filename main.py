@@ -7,21 +7,21 @@ pygame.init()
 width, height = 800, 600
 screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption('Beba e coma')
-player_image = pygame.image.load('img/Original3.png')
+player_image = pygame.image.load('img/Original.png')
 original_player_rect = player_image.get_rect()
 
 # Defina a escala desejada para o jogador
-escala_jogador = 2
+escala_jogador = 0.1
 player_image = pygame.transform.scale(player_image, (int(original_player_rect.width * escala_jogador), int(original_player_rect.height * escala_jogador)))
 player_rect = player_image.get_rect()
 player_rect.center = (width // 2, height // 2)
 
 # Carregar a imagem dos pontos (substitua 'ponto.png' pelo caminho correto)
-point_image = pygame.image.load('img/Original3.png')
+point_image = pygame.image.load('img/Batata.png')
 original_point_rect = point_image.get_rect()
 
 # Defina a escala desejada para os pontos
-escala_ponto = 0.5
+escala_ponto = 0.1
 point_image = pygame.transform.scale(point_image, (int(original_point_rect.width * escala_ponto), int(original_point_rect.height * escala_ponto)))
 
 # Propriedades dos pontos
@@ -47,22 +47,22 @@ while True:
 
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT] and player_rect.left - player_rect.width > 0:
-        player_rect.x -= 10
+        player_rect.x -= 5
     if keys[pygame.K_RIGHT] and player_rect.right + player_rect.width < width:
-        player_rect.x += 10
+        player_rect.x += 5
     if keys[pygame.K_UP] and player_rect.top - player_rect.height > 0:
-        player_rect.y -= 10
+        player_rect.y -= 5
     if keys[pygame.K_DOWN] and player_rect.bottom + player_rect.height < height:
-        player_rect.y += 10
+        player_rect.y += 5
 
-    # Verificar colisão com os pontos menores
-    for point_rect in points[:]:
-        if player_rect.colliderect(point_rect):
-            points.remove(point_rect)
-            score += 1
-            print(f'Pontos coletados: {score}')
-            # Spawnar um novo ponto
-            points.append(spawn_point())
+    for point in points[:]:
+        if isinstance(player_rect, pygame.Rect) and isinstance(point, pygame.Rect):
+            if player_rect.colliderect(point):
+                points.remove(point)
+                score += 1
+                print(f'Pontos coletados: {score}')
+                # Spawnar um novo ponto
+                points.append(spawn_point())
 
     # Limpar a tela
     screen.fill((255, 255, 255))
